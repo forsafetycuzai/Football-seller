@@ -47,8 +47,12 @@ html{scroll-behavior:smooth}
 body{font-family:'TH Sarabun PSK','Sarabun',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;font-size:15px;transition:background .3s,color .3s}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--surface2)}::-webkit-scrollbar-thumb{background:var(--orange);border-radius:3px}
 /* theme toggle button */
-.theme-toggle{background:var(--surface2);border:1.5px solid var(--border);border-radius:50px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--text);font-family:'TH Sarabun PSK','Sarabun',sans-serif;font-weight:600;transition:all .2s}
-.theme-toggle:hover{border-color:var(--orange);color:var(--orange)}
+.theme-toggle{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:4px 2px}
+.theme-toggle-track{width:48px;height:26px;border-radius:50px;background:#c8cde0;border:2px solid #b0b8d0;position:relative;transition:background .3s,border-color .3s;flex-shrink:0}
+[data-theme="dark"] .theme-toggle-track{background:#e8641a;border-color:#c94e0a}
+.theme-toggle-thumb{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:transform .3s;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1}
+[data-theme="dark"] .theme-toggle-thumb{transform:translateX(22px)}
+.theme-toggle-label{font-size:12px;font-weight:600;color:var(--muted);font-family:'TH Sarabun PSK','Sarabun',sans-serif;min-width:28px}
 
 /* ── TOP BAR ── */
 .topbar{background:var(--blue);color:rgba(255,255,255,.85);padding:8px 60px;display:flex;align-items:center;justify-content:space-between;font-size:12px;gap:10px;flex-wrap:wrap}
@@ -79,9 +83,9 @@ nav{position:sticky;top:0;z-index:1000;background:var(--white);border-bottom:2px
 
 /* ── HERO ── */
 .hero{background:#1a3a1a;min-height:540px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:48px;padding:70px 60px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=1400&q=80') center/cover no-repeat;filter:brightness(2.0);pointer-events:none;z-index:0}
+.hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=1400&q=80') center/cover no-repeat;filter:brightness(1.1);pointer-events:none;z-index:0}
 .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,10,20,.25) 0%,rgba(5,10,20,.1) 50%,rgba(0,15,0,.15) 100%);pointer-events:none;z-index:0}
-.hero-content{position:relative;z-index:1;background:linear-gradient(135deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.1) 100%);border:2px solid rgba(255,255,255,.35);border-radius:28px;padding:40px;backdrop-filter:blur(14px);box-shadow:0 10px 48px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.35);overflow:hidden}
+.hero-content{position:relative;z-index:1;background:rgba(10,14,30,.72);border:1px solid rgba(255,255,255,.12);border-radius:28px;padding:40px;backdrop-filter:blur(12px);box-shadow:0 10px 48px rgba(0,0,0,.4);overflow:hidden}
 .hero-content>*{position:relative;z-index:1}
 .hero-badge-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .h-badge{display:inline-flex;align-items:center;gap:5px;border-radius:50px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.5px}
@@ -413,7 +417,10 @@ footer{background:var(--blue);padding:55px 60px 28px}
       <li><a href="#contact"><span class="nav-icon">📞</span>ติดต่อเรา</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Dark</button>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="เปลี่ยนธีม">
+        <span class="theme-toggle-label" id="themeLabel">☀️</span>
+        <div class="theme-toggle-track"><div class="theme-toggle-thumb">🌙</div></div>
+      </button>
       <button class="nav-cart" onclick="openCart()">🛒 ตะกร้า <div class="cart-badge" id="cartCount">0</div></button>
     </div>
   </div>
@@ -1200,16 +1207,16 @@ function toggleTheme(){
   const html=document.documentElement;
   const isDark=html.getAttribute('data-theme')==='dark';
   html.setAttribute('data-theme',isDark?'light':'dark');
-  const btn=document.getElementById('themeToggle');
-  btn.textContent=isDark?'🌙 Dark':'☀️ Light';
+  const lbl=document.getElementById('themeLabel');
+  if(lbl)lbl.textContent=isDark?'☀️':'🌙';
   localStorage.setItem('theme',isDark?'light':'dark');
 }
 (function(){
   const saved=localStorage.getItem('theme')||'light';
   document.documentElement.setAttribute('data-theme',saved);
   document.addEventListener('DOMContentLoaded',()=>{
-    const btn=document.getElementById('themeToggle');
-    if(btn)btn.textContent=saved==='dark'?'☀️ Light':'🌙 Dark';
+    const lbl=document.getElementById('themeLabel');
+    if(lbl)lbl.textContent=saved==='dark'?'🌙':'☀️';
   });
 })();
 
